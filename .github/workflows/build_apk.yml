@@ -1,0 +1,33 @@
+name: Android APK Derle
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu Çek
+        uses: actions/checkout@v4
+
+      - name: JDK 17 Kur
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Gradle Kur ve APK Derle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
+      - name: Debug APK Oluştur
+        run: gradle assembleDebug
+
+      - name: Hazır APK Dosyasını Yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: TelegramOtoGorev-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
